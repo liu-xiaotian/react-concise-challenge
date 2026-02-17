@@ -3,11 +3,20 @@ import Day from "./Day";
 import styles from "./Home.module.css";
 import { useEffect, useState } from "react";
 import { useGeolocation } from "../hooks/useGeolocation";
+import { getCurrentWeather } from "../services/apiWeather";
 
 function Home() {
-  const { position, getCurrentLocation } = useGeolocation();
+  const { getCurrentLocation } = useGeolocation();
   useEffect(() => {
-    getCurrentLocation();
+    async function loadData(params) {
+      const position = await getCurrentLocation();
+      const weatherData = getCurrentWeather(
+        position.latitude,
+        position.longitude,
+      );
+      console.log("weatherData:", weatherData);
+    }
+    loadData();
   }, []);
   return (
     <section className={styles.section}>
