@@ -1,8 +1,14 @@
 import { Button } from "@mui/material";
 import Day from "./Day";
 import styles from "./Home.module.css";
+import { useEffect, useState } from "react";
+import { useGeolocation } from "../hooks/useGeolocation";
 
 function Home() {
+  const { position, getCurrentLocation } = useGeolocation();
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
   return (
     <section className={styles.section}>
       <Day />
