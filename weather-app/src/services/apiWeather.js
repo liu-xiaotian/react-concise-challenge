@@ -1,8 +1,9 @@
-const API_KEY = "ac3a0a53d0ab078b82d2ab2e679253de";
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
 export async function getCurrentWeather(lat, lon) {
   try {
     const response = await fetch(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`,
+      `${API_URL}/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`,
     );
     return await response.json();
   } catch (error) {
