@@ -1,13 +1,12 @@
 import { Button } from "@mui/material";
-import Day from "./Day";
-import styles from "./Home.module.css";
 import Welcome from "./Welcome";
 import useCurrentWeather from "../hooks/useCurrentWeather";
+import CurrentWeather from "./CurrentWeather";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_API_KEY;
 
-function Home({ getPosition, status }) {
+function Home({ getPosition, status, setIsHome }) {
   // const [data, setData] = useState(null);
 
   // const { trigger, data, isMutating, error } = useSWRMutation(API_URL, fetcher);
@@ -20,15 +19,14 @@ function Home({ getPosition, status }) {
 
   const { data, isMutating, getCurrentWeather } =
     useCurrentWeather(getPosition);
+
+  if (data) {
+    return <CurrentWeather data={data} status={status} setIsHome={setIsHome} />;
+  }
+
   return (
-    <section className={styles.section}>
-      {data && (
-        <Day
-          temperature={{ max: data.main.temp_max, min: data.main.temp_min }}
-          iconCode={data.weather[0].icon}
-        />
-      )}
-      {!data && <Welcome>Welcome To Weather App</Welcome>}
+    <>
+      <Welcome>{isMutating ? "Loading..." : "Welcome To Weather App"}</Welcome>
       <Button
         disabled={isMutating}
         variant="contained"
@@ -37,7 +35,7 @@ function Home({ getPosition, status }) {
       >
         {status}
       </Button>
-    </section>
+    </>
   );
 }
 export default Home;

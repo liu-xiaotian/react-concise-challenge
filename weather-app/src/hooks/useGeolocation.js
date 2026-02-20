@@ -2,6 +2,7 @@ import { useState } from "react";
 
 export default function () {
   const [status, setStatus] = useState("Get Current Weather");
+  const [position, setPosition] = useState(null);
 
   async function getPosition() {
     return new Promise((resolve, reject) => {
@@ -20,6 +21,7 @@ export default function () {
 
           resolve({ latitude, longitude });
           setStatus("Get Forecast Weather");
+          setPosition({ latitude, longitude });
         },
         (error) => {
           reject(error);
@@ -30,5 +32,5 @@ export default function () {
       );
     });
   }
-  return { getPosition, status };
+  return { getPosition, status, position };
 }
