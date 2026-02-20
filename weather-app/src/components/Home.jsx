@@ -1,24 +1,25 @@
 import { Button } from "@mui/material";
 import Day from "./Day";
 import styles from "./Home.module.css";
-import { getCurrentWeather as getCurrentWeatherApi } from "../services/apiWeather";
-import { useState } from "react";
 import Welcome from "./Welcome";
+import useCurrentWeather from "../hooks/useCurrentWeather";
+
+const API_URL = import.meta.env.VITE_API_URL;
+const API_KEY = import.meta.env.VITE_API_KEY;
 
 function Home({ getPosition, status }) {
-  const [data, setData] = useState(null);
+  // const [data, setData] = useState(null);
 
-  async function getCurrentWeather() {
-    const position = await getPosition();
+  // const { trigger, data, isMutating, error } = useSWRMutation(API_URL, fetcher);
 
-    const crrentWeatherData = await getCurrentWeatherApi(
-      position.latitude,
-      position.longitude,
-    );
-    console.log(crrentWeatherData);
+  // async function getCurrentWeather() {
+  //   const position = await getPosition();
+  //   const { latitude: lat, longitude: lon } = position;
+  //   await trigger({ path: "weather", lat, lon, apiKey: API_KEY });
+  // }
 
-    setData(crrentWeatherData);
-  }
+  const { data, isMutating, getCurrentWeather } =
+    useCurrentWeather(getPosition);
   return (
     <section className={styles.section}>
       {data && (
@@ -28,7 +29,12 @@ function Home({ getPosition, status }) {
         />
       )}
       {!data && <Welcome>Welcome To Weather App</Welcome>}
-      <Button variant="contained" size="large" onClick={getCurrentWeather}>
+      <Button
+        disabled={isMutating}
+        variant="contained"
+        size="large"
+        onClick={getCurrentWeather}
+      >
         {status}
       </Button>
     </section>
